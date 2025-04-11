@@ -10,3 +10,12 @@ async def webhook(info):
         return {"info": info}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/webhook")
+async def verify_subscription(info):
+    try:
+        print("info: ", info)
+        return {"info": info}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
