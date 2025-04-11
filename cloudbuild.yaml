@@ -1,13 +1,13 @@
 steps:
 # Build the image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE', '.']
+  args: ['build', '-t', 'us-west2-docker.pkg.dev/test-by-yuji/webhook-ar/webhook-image', '.']
 # Push the image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE']
+  args: ['push', 'us-west2-docker.pkg.dev/test-by-yuji/webhook-ar/webhook-image']
 # Deploy image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'SERVICE_NAME', '--image', 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE', '--region', 'SERVICE_REGION']
+  args: ['run', 'deploy', 'webhook-service', '--image', 'us-west2-docker.pkg.dev/test-by-yuji/webhook-ar/webhook-image', '--region', 'us-west2']
 images:
-- 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE'
+- 'us-west2-docker.pkg.dev/test-by-yuji/webhook-ar/webhook-image'
