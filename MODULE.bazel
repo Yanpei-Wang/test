@@ -1,0 +1,34 @@
+
+bazel_dep(name = "aspect_rules_js", version = "2.4.0")
+bazel_dep(name = "rules_nodejs", version = "6.3.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.14.0")
+bazel_dep(name = "platforms", version = "0.0.11")
+
+
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain(node_version = "18.19.1") # Specify your desired Node.js version
+
+
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
+pnpm.pnpm(
+    name = "pnpm",
+    pnpm_version = "8.6.7", # Specify the pnpm version
+    # Find the correct integrity hash for pnpm 8.6.7
+    pnpm_version_integrity = "sha512-vRIWpD/L4phf9Bk2o/O2TDR8fFoJnpYrp2TKqTIZF/qZ2/rgL3qKXzHofHgbXsinwMoSEigz28sqk3pQ+yMEQQ==", # !!! REPLACE WITH CORRECT HASH !!!
+)
+
+
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+npm.npm_translate_lock(
+    name = "npm",
+    pnpm_lock = "//frontend:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+    data = [
+        "//frontend:package.json",
+        "//frontend:pnpm-lock.yaml",
+    ],
+)
+
+
+use_repo(npm, "npm")
+use_repo(pnpm, "pnpm")
