@@ -73,7 +73,7 @@ genrule(
     outs = ["app_static_content.tar.gz"], # 输出的 tarball 文件
     cmd = """
         mkdir -p $(RULEDIR)/staging/usr/share/nginx/html
-        cp -r $(location :dist)/* $(RULEDIR)/staging/usr/share/nginx/html/
+        cp -rL $(location :dist)/* $(RULEDIR)/staging/usr/share/nginx/html/
         tar -czf $@ -C $(RULEDIR)/staging .
     """,
     executable = True,
@@ -86,7 +86,7 @@ oci_image(
     tars = [
         ":nginx_static_tarball",
     ],
-    entrypoint = ["nginx", "-g", "daemon off;"],
+    cmd = ["nginx", "-g", "daemon off;"],
     visibility = ["//visibility:public"],
 )
 
@@ -103,5 +103,5 @@ oci_push(
     name = "frontend_image_push_dynamic",
     image = ":platform_image",
     remote_tags = ["test"],
-    repository = "us-docker.pkg.dev/k8s-dev-437501/purrf",
+    repository = "us-docker.pkg.dev/k8s-dev-437501/puttf-frontend/image2",
 )
